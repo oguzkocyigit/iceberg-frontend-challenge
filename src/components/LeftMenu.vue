@@ -6,7 +6,7 @@
     <nav>
       <router-link to="/">Dashboard</router-link>
       <router-link to="/appointments">Appointments</router-link>
-      <router-link to="/createAppointment">Create Appointment</router-link>
+      <router-link to="/appointments/create">Create Appointment</router-link>
     </nav>
   </div>
 </template>

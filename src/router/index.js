@@ -19,9 +19,10 @@ const routes = [
     component: AppointmentsListView
   },
   {
-    path: '/createAppointment',
-    name: 'createAppointment',
-    component: CreateAppointmentView
+    path: '/appointments/create/:id?',
+    name: 'create-appointment',
+    component: CreateAppointmentView,
+    props: route => ({ appointmentId: route.params.id }),
   }
 ]
 

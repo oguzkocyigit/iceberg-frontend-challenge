@@ -2,7 +2,7 @@
   <div class="appointments-list-view">
     <div class="flex justify-center h-screen">
       <div class="w-10/12 mx-auto bg-white rounded-lg">
-        <div v-if="!records.length" class="flex items-center justify-center h-full" style="margin-top: -10vh">
+        <div v-if="!records.length" class="fixed inset-0 bg-gray-500 opacity-75 flex items-center justify-center">
           <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>
         <div v-else class="table-container">
@@ -26,7 +26,6 @@
               :sort-order="sortOrder"
               :format-date="formatDate"
               @sort-by-column="handleSortByColumn"
-              @edit-appointment="editAppointment"
           ></app-table>
         </div>
       </div>
@@ -103,8 +102,6 @@ export default {
       });
     });
 
-    const editAppointment = () => {
-    };
 
     return {
       records,
@@ -113,7 +110,6 @@ export default {
       formatDate,
       sortedRecords,
       sortOrder,
-      editAppointment,
       handleSortByColumn,
       selectedAgent,
       filteredRecords,

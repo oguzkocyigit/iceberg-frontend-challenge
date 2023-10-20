@@ -57,6 +57,7 @@
 </template>
 <script>
 import {computed} from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   props: {
@@ -67,6 +68,8 @@ export default {
     formatDate: Function,
   },
   setup(props, {emit}) {
+    const router = useRouter();
+
     const sortedRecords = computed(() => {
       return [...props.records].sort((a, b) => {
         let comparison = 0;
@@ -102,10 +105,15 @@ export default {
       emit('sort-by-column', column);
     };
 
+    const editAppointment = (record) => {
+      router.push({ name: 'create-appointment', params: { id: record.id } });
+    };
+
     return {
       sortedRecords,
       filteredRecords,
-      handleSortByColumn
+      handleSortByColumn,
+      editAppointment
     };
   },
 };
