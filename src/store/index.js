@@ -4,11 +4,15 @@ import ApiService from '@/services/ApiService';
 export default createStore({
   state: {
     agents: [],
+    contacts: [],
     records: [],
   },
   mutations: {
     setAgents(state, agents) {
       state.agents = agents;
+    },
+    setContacts(state, contacts) {
+      state.contacts = contacts;
     },
     setRecords(state, records) {
       const currentDate = new Date();
@@ -23,9 +27,25 @@ export default createStore({
     async fetchAgents({ commit }) {
       try {
         const response = await ApiService.get('/Agents');
-        commit('setAgents', response.data.records);
+        // filtering response data if name and surname are empty from response
+        const filteredRecords = response.data.records.filter(record =>
+            record.fields.agent_name && record.fields.agent_surname
+        );
+        commit('setAgents', filteredRecords);
       } catch (error) {
         console.error('Error fetching agents: ', error);
+      }
+    },
+    async fetchContacts({ commit }) {
+      try {
+        const response = await ApiService.get('/Contacts');
+        // filtering response data if name and surname are empty from response
+        const filteredRecords = response.data.records.filter(record =>
+            record.fields.contact_name && record.fields.contact_surname
+        );
+        commit('setContacts', filteredRecords);
+      } catch (error) {
+        console.error('Error fetching contacts: ', error);
       }
     },
     async fetchRecords({ commit }) {

@@ -2,21 +2,24 @@
   <div class="appointments-list-view">
     <div class="flex justify-center h-screen">
       <div class="w-10/12 mx-auto bg-white rounded-lg">
-        <div class="flex items-center justify-end mb-4">
-          <label for="agentFilter" class="mr-2">Filter by Agent:</label>
-          <select v-model="selectedAgent" id="agentFilter" class="border p-2">
-            <option value="">All Agents</option>
-            <option
-                v-for="agent in agents"
-                :value="agent.id"
-                :key="agent.id"
-            >
-              {{ agent.fields.agent_name }}
-              {{ agent.fields.agent_surname }}
-            </option>
-          </select>
+        <div v-if="!records.length" class="flex items-center justify-center h-full" style="margin-top: -10vh">
+          <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>
-        <div class="table-container">
+        <div v-else class="table-container">
+          <div class="flex items-center justify-end mb-4">
+            <label for="agentFilter" class="mr-2">Filter by Agent:</label>
+            <select v-model="selectedAgent" id="agentFilter" class="border p-2">
+              <option value="">All Agents</option>
+              <option
+                  v-for="agent in agents"
+                  :value="agent.id"
+                  :key="agent.id"
+              >
+                {{ agent.fields.agent_name }}
+                {{ agent.fields.agent_surname }}
+              </option>
+            </select>
+          </div>
           <app-table
               :records="filteredRecords"
               :sort-by="sortBy"
