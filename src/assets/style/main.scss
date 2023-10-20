@@ -22,46 +22,19 @@ html {
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-
 .fixed-left-menu {
   width: 200px;
-  height: 100vh;
-  background-color: #f0f0f0;
-  padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  left:0;
-  top:0;
 
   .brand-logo {
     width: 100%;
   }
 
   nav {
-    margin-top: 30px;
     a {
-      display: block;
-      width: 100%;
-      margin-bottom: 15px;
-      text-decoration: none;
-      color: $brand-color;
-      &:last-child {
-        margin-bottom: 0;
-      }
+      font-size: 16px;
       &:hover {
-        color: #ffffff;
+        color: $brand-color;
       }
     }
   }
