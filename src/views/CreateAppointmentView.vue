@@ -1,7 +1,13 @@
 <template>
   <div class="create-appointment-view">
-    <h2 class="text-2xl font-semibold mb-4">Create Appointment</h2>
-    <div class="w-10/12 mx-auto p-6 bg-white shadow-lg rounded-lg create-appointment-view-container flex">
+    <h2 class="text-2xl font-semibold mb-4">
+      <span v-if="!appointmentId">Create Appointment</span>
+      <span v-else>Edit Appointment</span>
+    </h2>
+    <div v-if="isLoading" class="fixed inset-0 bg-gray-500 opacity-75 flex items-center justify-center">
+      <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+    </div>
+    <div v-else class="w-10/12 mx-auto p-6 bg-white shadow-lg rounded-lg create-appointment-view-container flex">
       <div class="w-1/2 mr-4">
         <g-map
             v-if="isRendered"
@@ -33,12 +39,17 @@
             </select>
             <input v-else :disabled="field.disabled" :type="field.type" :id="key" v-model="field.value" class="w-3/4 p-2 border rounded-md" :class="field.error ? 'border-red-500' : ''">
           </div>
-          <button type="submit" class="w-3/4 float-right bg-green-500 text-white font-bold px-4 py-2 rounded-md hover:bg-green-600">Create Appointment</button>
+          <button type="submit" class="w-3/4 float-right bg-green-500 text-white font-bold px-4 py-2 rounded-md hover:bg-green-600">
+            <span v-if="!appointmentId">Create Appointment</span>
+            <span v-else>Edit Appointment</span>
+          </button>
           <div v-if="showSuccessAlert" class="fixed bottom-0 left-0 w-full bg-green-500 text-white p-4 text-center">
-            Appointment created successfully!
+            <span v-if="!appointmentId">Appointment is created successfully!</span>
+            <span v-else>Appointment is edited successfully!</span>
           </div>
           <div v-if="showErrorAlert" class="fixed bottom-0 left-0 w-full bg-red-500 text-white p-4 text-center">
-            Appointment is not created! Please try again.
+            <span v-if="!appointmentId">Appointment is not created! Please try again.</span>
+            <span v-else>Appointment is not edited! Please try again.</span>
           </div>
         </form>
       </div>
@@ -62,6 +73,9 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const appointmentId = ref(null);
+
+    const isLoading = ref(false);
 
     const formFields = reactive({
       postalCode: { label: 'Postal Code', type: 'text', value: '', error: '', disabled: false },
@@ -178,7 +192,13 @@ export default {
             ]
           };
 
-          const response = await ApiService.post('/Appointments', postData);
+          let response;
+          if (appointmentId.value) {
+            postData.records[0].id = appointmentId.value;
+            response = await ApiService.patch('/Appointments', postData);
+          } else {
+            response = await ApiService.post('/Appointments', postData);
+          }
 
           if (response.status === 200) {
             showSuccessAlert.value = true;
@@ -203,7 +223,42 @@ export default {
       }
     };
 
+    const appointmentRecord = ref(null);
+
+    const fetchAppointmentData = async () => {
+      isLoading.value = true;
+      try {
+        const response = await ApiService.get(`/Appointments/${appointmentId.value}`);
+        if (response.status === 200) {
+          appointmentRecord.value = response.data;
+          const record = appointmentRecord.value.fields;
+
+          const appointmentDate = new Date(record.appointment_date);
+          const formattedAppointmentDate = appointmentDate.toISOString().split('T')[0];
+
+          formFields.postalCode.value = record.appointment_postcode;
+          formFields.appointmentDate.value = formattedAppointmentDate;
+          formFields.realtor.value = record.agent_id[0];
+          formFields.contact.value = record.contact_id[0];
+          isLoading.value = false;
+        } else {
+          console.error('Error fetching appointment data:', response.status);
+        }
+      } catch (error) {
+        isLoading.value = false;
+        console.error('Error fetching appointment data:', error);
+      }
+    };
+
+    onMounted(() => {
+      appointmentId.value = router.currentRoute.value.params.id;
+      if (appointmentId.value) {
+        fetchAppointmentData()
+      }
+    });
+
     return {
+      appointmentId,
       formFields,
       isFormValid,
       agents,
@@ -218,7 +273,10 @@ export default {
       totalAppointmentTime,
       handleMapClick,
       showSuccessAlert,
-      showErrorAlert
+      showErrorAlert,
+      appointmentRecord,
+      fetchAppointmentData,
+      isLoading
     };
   }
 };
