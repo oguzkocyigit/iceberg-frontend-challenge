@@ -1,29 +1,27 @@
-# iceberg-technical-assessment
+Project Name: iceberg-frontend-challenge
 
-## Project setup
-```
-npm install
-```
+Version: 0.1.0
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Description:
+This is a Vue.js 3 project named "iceberg-frontend-challenge". It includes various dependencies and devDependencies for building a modern web application. The project utilizes Vue.js 3, Vuex for state management, Vue Router for routing, and Axios for handling HTTP requests. It also integrates Google Maps functionality via the "@fawmi/vue-google-maps" package. The project follows modern JavaScript standards and utilizes tools like ESLint for linting, and Vue CLI for development tasks.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+Setup:
 
-### Run your unit tests
-```
-npm run test:unit
-```
+Make sure you have Node.js and npm installed.
+Run npm install to install project dependencies.
+Use the following npm scripts:
+npm run serve - Start the development server.
+npm run build - Build the project for production.
+npm run lint - Lint the project files.
 
-### Lints and fixes files
-```
-npm run lint
-```
+Folder Structure:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+src/ - Contains the source code files.
+public/ - Contains static assets and the main HTML file.
+
+How to Use:
+
+Clone the repository: git clone <repository-url>
+Navigate to the project directory: cd iceberg-frontend-challenge
+Install dependencies: npm install
+Start the development server: npm run serve
