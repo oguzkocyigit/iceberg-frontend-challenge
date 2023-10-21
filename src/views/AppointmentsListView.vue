@@ -5,7 +5,7 @@
         <div v-if="!records.length" class="fixed inset-0 bg-gray-500 opacity-75 flex items-center justify-center">
           <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div>
-        <div v-else class="table-container">
+        <div v-else>
           <div class="flex items-center justify-end mb-4">
             <label for="agentFilter" class="mr-2">Filter by Agent:</label>
             <select v-model="selectedAgent" id="agentFilter" class="border p-2">
@@ -20,13 +20,15 @@
               </option>
             </select>
           </div>
-          <app-table
-              :records="filteredRecords"
-              :sort-by="sortBy"
-              :sort-order="sortOrder"
-              :format-date="formatDate"
-              @sort-by-column="handleSortByColumn"
-          ></app-table>
+          <div class="table-container">
+            <app-table
+                :records="filteredRecords"
+                :sort-by="sortBy"
+                :sort-order="sortOrder"
+                :format-date="formatDate"
+                @sort-by-column="handleSortByColumn"
+            ></app-table>
+          </div>
         </div>
       </div>
     </div>
